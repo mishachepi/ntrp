@@ -1,5 +1,5 @@
 import type { ServerEvent, Config } from "../types.js";
-import { api } from "./fetch.js";
+import { api, getApiKey } from "./fetch.js";
 
 export async function* streamChat(
   message: string,
@@ -7,9 +7,13 @@ export async function* streamChat(
   config: Config,
   skipApprovals: boolean = false
 ): AsyncGenerator<ServerEvent, void, unknown> {
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const apiKey = getApiKey();
+  if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
+
   const response = await fetch(`${config.serverUrl}/chat/stream`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({ message, session_id: sessionId, skip_approvals: skipApprovals }),
   });
 

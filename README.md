@@ -42,10 +42,10 @@ uv sync
 cd ntrp-ui && bun install && cd ..
 
 cp .env.example .env
-# Edit .env – set at least one LLM key and the model variables
+# Edit .env – set at least one LLM key, model variables, and NTRP_API_KEY
 
 uv run ntrp serve              # backend
-cd ntrp-ui && bun run src/index.tsx  # UI (separate terminal)
+NTRP_API_KEY=<key> bun run ntrp-ui/src/index.tsx  # UI (separate terminal)
 ```
 
 See [docs/setup.md](docs/setup.md) for Google OAuth, Telegram, Obsidian, custom models, Docker, and other integrations.
