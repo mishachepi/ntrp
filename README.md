@@ -62,6 +62,10 @@ See [docs/setup.md](docs/setup.md) for Google OAuth, Telegram, Obsidian, custom 
 - [letta](https://github.com/letta-ai/letta) – persistent memory and personalized approach
 - [hindsight](https://github.com/vectorize-io/hindsight) – graph memory structure
 
+## Versioning
+
+Pre-1.0: `0.minor.patch`. Minor bumps for new features (may be breaking), patch bumps for fixes. All changes go through PRs, except docs and minor non-code updates.
+
 ## License
 
 MIT
