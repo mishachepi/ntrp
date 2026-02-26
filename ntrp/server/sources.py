@@ -3,6 +3,7 @@ from ntrp.config import Config
 from ntrp.events.internal import SourceChanged
 from ntrp.logging import get_logger
 from ntrp.sources.base import Source
+from ntrp.sources.google.auth import discover_gmail_tokens
 from ntrp.sources.registry import SOURCES
 
 _logger = get_logger(__name__)
@@ -71,8 +72,6 @@ class SourceManager:
         self._channel.publish(SourceChanged(source_name=name))
 
     def has_google_auth(self) -> bool:
-        from ntrp.sources.google.auth import discover_gmail_tokens
-
         return len(discover_gmail_tokens()) > 0
 
     def _init_sources(self, config: Config) -> None:

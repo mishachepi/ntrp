@@ -67,6 +67,9 @@ class Config(BaseSettings):
     # Telegram bot token (optional) - no prefix, standard env var
     telegram_bot_token: str | None = Field(default=None, alias="TELEGRAM_BOT_TOKEN")
 
+    # Google Cloud project (optional) - needed for Gmail Pub/Sub monitor
+    gcp_project: str | None = Field(default=None, alias="GOOGLE_CLOUD_PROJECT")
+
     # Obsidian vault
     vault_path: Path | None = None
 
@@ -79,6 +82,7 @@ class Config(BaseSettings):
 
     # API authentication (optional — required when exposed to network)
     api_key: str | None = None
+    webhook_token: str | None = None
 
     @model_validator(mode="after")
     def _default_explore_model(self) -> "Config":
