@@ -4,7 +4,7 @@
   "description": "ntrp – personal entropy reduction system",
   "type": "module",
   "bin": {
-    "ntrp": "./dist/index.js"
+    "ntrp": "dist/index.js"
   },
   "files": [
     "dist"
