@@ -14,11 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - id: check
         run: |
-          files=$(git diff --name-only HEAD~1 HEAD)
+          prev_tag=$(git tag --sort=-v:refname | grep '^v' | sed -n '2p')
+          base=${prev_tag:-$(git rev-list --max-parents=0 HEAD)}
+          files=$(git diff --name-only "$base" HEAD)
           echo "$files" | grep -qE '^(ntrp/|pyproject\.toml|uv\.lock)' && echo "backend=true" >> "$GITHUB_OUTPUT" || true
           echo "$files" | grep -qE '^ntrp-ui/' && echo "cli=true" >> "$GITHUB_OUTPUT" || true
 
