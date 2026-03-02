@@ -45,7 +45,7 @@ ntrp-server serve   # starts backend, prints a one-time API key
 ntrp                # terminal UI (separate terminal) – paste the key on first launch
 ```
 
-Full setup guide, integrations, and API reference at **[ntrp.mintlify.app](https://ntrp.mintlify.app)**.
+Full setup guide, integrations, and API reference at **[docs.ntrp.io](https://docs.ntrp.io)**.
 
 ## Inspired by
 
