@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from importlib.metadata import version
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,7 +32,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="ntrp",
     description="Personal entropy reduction system - API server",
-    version="0.3.4",
+    version=version("ntrp"),
     lifespan=lifespan,
 )
 
