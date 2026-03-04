@@ -47,6 +47,16 @@ ntrp                # terminal UI (separate terminal) – paste the key on first
 
 Full setup guide, integrations, and API reference at **[docs.ntrp.io](https://docs.ntrp.io)**.
 
+## Releasing
+
+```bash
+./release patch   # 0.5.2 → 0.5.3
+./release minor   # 0.5.2 → 0.6.0
+./release major   # 0.5.2 → 1.0.0
+```
+
+Bumps version, creates a PR, merges, tags, and publishes a GitHub release. PyPI and npm packages are published automatically via CI.
+
 ## Inspired by
 
 - [opencode](https://github.com/nicepkg/opencode) – terminal UI
