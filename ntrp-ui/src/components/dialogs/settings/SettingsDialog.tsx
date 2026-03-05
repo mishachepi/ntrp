@@ -7,7 +7,7 @@ import type { ServerConfig } from "../../../api/client.js";
 import { SectionId, SECTION_IDS, SECTION_LABELS } from "./config.js";
 import { DialogSelect, type SelectOption } from "../../ui/index.js";
 import { ConnectionsSection } from "./ConnectionsSection.js";
-import { DirectivesSection, LimitsSection, NotifiersSection, ProvidersSection, ServerSection, ServicesSection, SkillsSection } from "./sections/index.js";
+import { DirectivesSection, LimitsSection, MCPSection, NotifiersSection, ProvidersSection, ServerSection, ServicesSection, SkillsSection } from "./sections/index.js";
 import { useSettingsState } from "../../../hooks/useSettingsState.js";
 import { useSettingsKeypress } from "../../../hooks/useSettingsKeypress.js";
 
@@ -36,7 +36,6 @@ export function SettingsDialog({
 
   const [activeSection, setActiveSection] = useState<SectionId>("server");
   const [drilled, setDrilled] = useState(false);
-  const [limitsIndex, setLimitsIndex] = useState(0);
 
   const state = useSettingsState({
     config,
@@ -53,11 +52,6 @@ export function SettingsDialog({
     drilled,
     setDrilled,
     setActiveSection,
-    limitsIndex,
-    setLimitsIndex,
-    settings,
-    serverConfig,
-    onUpdate,
     onClose,
   });
 
@@ -68,21 +62,24 @@ export function SettingsDialog({
     { value: null, title: "None (disable)", indicator: serverConfig?.browser == null ? "●" : undefined },
   ];
 
-  if (state.showingBrowserDropdown) {
+  if (state.connections.showingBrowserDropdown) {
     return (
       <DialogSelect<string | null>
         title="Browser"
         options={browserOptions}
         initialIndex={Math.max(0, browserOptions.findIndex(o => o.value === (serverConfig?.browser || null)))}
-        onSelect={(opt) => state.handleSelectBrowser(opt.value)}
-        onClose={() => state.setShowingBrowserDropdown(false)}
+        onSelect={(opt) => state.connections.handleSelectBrowser(opt.value)}
+        onClose={() => state.connections.setShowingBrowserDropdown(false)}
       />
     );
   }
 
-  const footerHints = drilled
-    ? [["↑↓", "navigate"], ["enter", "select"], ["←→", "adjust"], ["esc", "back"]] as [string, string][]
-    : [["↑↓", "section"], ["enter", "open"], ["esc", "close"]] as [string, string][];
+  const inToolsMode = drilled && activeSection === "mcp" && state.mcp.mcpMode === "tools";
+  const footerHints = inToolsMode
+    ? [["↑↓", "navigate"], ["space", "toggle"], ["a", "all/none"], ["^s", "save"], ["esc", "back"]] as [string, string][]
+    : drilled
+      ? [["↑↓", "navigate"], ["enter", "select"], ["←→", "adjust"], ["esc", "back"]] as [string, string][]
+      : [["↑↓", "section"], ["enter", "open"], ["esc", "close"]] as [string, string][];
 
   return (
     <Dialog
@@ -125,98 +122,21 @@ export function SettingsDialog({
 
               {/* Detail pane */}
               <box flexDirection="column" width={detailWidth} height={contentHeight} overflow="hidden">
-                {activeSection === "providers" && (
-                  <ProvidersSection
-                    providers={state.providers}
-                    selectedIndex={state.providersIndex}
-                    accent={accent}
-                    editing={state.editingProvider}
-                    keyValue={state.providerKeyValue}
-                    keyCursor={state.providerKeyCursor}
-                    saving={state.providerSaving}
-                    error={state.providerError}
-                    confirmingDisconnect={state.providerConfirmDisconnect}
-                  />
-                )}
-
-                {activeSection === "services" && (
-                  <ServicesSection
-                    services={state.services}
-                    selectedIndex={state.servicesIndex}
-                    accent={accent}
-                    editing={state.editingService}
-                    keyValue={state.serviceKeyValue}
-                    keyCursor={state.serviceKeyCursor}
-                    saving={state.serviceSaving}
-                    error={state.serviceError}
-                    confirmingDisconnect={state.serviceConfirmDisconnect}
-                  />
-                )}
-
-                {activeSection === "server" && (
-                  <ServerSection
-                    serverUrl={state.serverUrl}
-                    serverUrlCursor={state.serverUrlCursor}
-                    apiKey={state.serverApiKey}
-                    apiKeyCursor={state.serverApiKeyCursor}
-                    selectedIndex={state.serverIndex}
-                    editing={state.editingServer}
-                    accent={accent}
-                    saving={state.serverSaving}
-                    error={state.serverError}
-                  />
-                )}
-
-                {activeSection === "directives" && (
-                  <DirectivesSection
-                    content={state.directivesContent}
-                    cursorPos={state.directivesCursorPos}
-                    editing={state.editingDirectives}
-                    saving={state.savingDirectives}
-                    accent={accent}
-                    height={contentHeight}
-                  />
-                )}
-
-                {activeSection === "skills" && (
-                  <SkillsSection skills={state.skills} accent={accent} width={detailWidth} />
-                )}
-
-                {activeSection === "connections" && (
-                  <ConnectionsSection
-                    serverConfig={serverConfig}
-                    googleAccounts={state.googleAccounts}
-                    selectedItem={state.connectionItem}
-                    selectedGoogleIndex={state.selectedGoogleIndex}
-                    accent={accent}
-                    width={detailWidth}
-                    editingVault={state.editingVault}
-                    vaultPath={state.vaultPath}
-                    vaultCursorPos={state.vaultCursorPos}
-                    updatingVault={state.updatingVault}
-                    vaultError={state.vaultError}
-                    updatingBrowser={state.updatingBrowser}
-                    browserError={state.browserError}
-                  />
-                )}
-
-                {activeSection === "notifiers" && (
-                  <NotifiersSection notifiers={state.notifiers} accent={accent} />
-                )}
-
-                {activeSection === "limits" && (
-                  <LimitsSection
-                    settings={settings.agent}
-                    selectedIndex={limitsIndex}
-                    accent={accent}
-                  />
-                )}
+                {activeSection === "providers" && <ProvidersSection providers={state.providers} accent={accent} />}
+                {activeSection === "services" && <ServicesSection services={state.services} accent={accent} />}
+                {activeSection === "server" && <ServerSection server={state.server} accent={accent} />}
+                {activeSection === "directives" && <DirectivesSection directives={state.directives} accent={accent} height={contentHeight} />}
+                {activeSection === "skills" && <SkillsSection skills={state.skills} accent={accent} width={detailWidth} height={contentHeight} />}
+                {activeSection === "connections" && <ConnectionsSection connections={state.connections} serverConfig={serverConfig} accent={accent} width={detailWidth} />}
+                {activeSection === "notifiers" && <NotifiersSection notifiers={state.notifiers} accent={accent} />}
+                {activeSection === "mcp" && <MCPSection mcp={state.mcp} accent={accent} width={detailWidth} height={contentHeight} />}
+                {activeSection === "limits" && <LimitsSection settings={settings.agent} selectedIndex={state.limits.limitsIndex} accent={accent} />}
               </box>
             </box>
 
-            {state.actionInProgress && (
+            {state.connections.actionInProgress && (
               <box marginTop={1}>
-                <text><span fg={colors.status.warning}>{state.actionInProgress}</span></text>
+                <text><span fg={colors.status.warning}>{state.connections.actionInProgress}</span></text>
               </box>
             )}
           </>

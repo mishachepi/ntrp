@@ -1,4 +1,4 @@
-export const SECTION_IDS = ["server", "providers", "services", "directives", "connections", "skills", "notifiers", "limits"] as const;
+export const SECTION_IDS = ["server", "providers", "services", "directives", "connections", "skills", "notifiers", "mcp", "limits"] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
 
 export const SECTION_LABELS = {
@@ -9,6 +9,7 @@ export const SECTION_LABELS = {
   connections: "Connections",
   skills: "Skills",
   notifiers: "Notifiers",
+  mcp: "MCP Servers",
   limits: "Limits",
 } satisfies Record<SectionId, string>;
 
@@ -37,3 +38,15 @@ export const CONNECTION_LABELS = {
 } satisfies Record<ConnectionItem, string>;
 
 export const TOGGLEABLE_SOURCES: ConnectionItem[] = ["gmail", "calendar", "memory"];
+
+export const NOTIFIER_TYPE_ORDER = ["email", "telegram", "bash"] as const;
+export const NOTIFIER_TYPE_LABELS: Record<string, string> = {
+  email: "Email",
+  telegram: "Telegram",
+  bash: "Bash",
+};
+export const NOTIFIER_TYPE_DESCRIPTIONS: Record<string, string> = {
+  email: "Send via connected Gmail",
+  telegram: "Send via Telegram bot",
+  bash: "Run shell command",
+};
