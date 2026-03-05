@@ -63,12 +63,16 @@ def _config_response(rt: Runtime) -> dict:
     config = rt.config
     has_google = rt.source_mgr.has_google_auth()
     memory_connected = rt.memory is not None
+    web_source = rt.source_mgr.sources.get("web")
+    web_provider = getattr(web_source, "provider", "unknown") if web_source else "none"
 
     return {
         "chat_model": config.chat_model,
         "explore_model": config.explore_model,
         "memory_model": config.memory_model,
         "embedding_model": config.embedding_model,
+        "web_search": config.web_search,
+        "web_search_provider": web_provider,
         "vault_path": config.vault_path,
         "browser": config.browser,
         "gmail_enabled": config.gmail,
@@ -88,7 +92,12 @@ def _config_response(rt: Runtime) -> dict:
                 **({"error": rt.source_mgr.errors["calendar"]} if "calendar" in rt.source_mgr.errors else {}),
             },
             "memory": {"enabled": config.memory, "connected": memory_connected},
-            "web": {"connected": "web" in rt.source_mgr.sources},
+            "web": {
+                "connected": web_source is not None,
+                "mode": config.web_search,
+                "provider": web_provider,
+                **({"error": rt.source_mgr.errors["web"]} if "web" in rt.source_mgr.errors else {}),
+            },
             "notes": {
                 "connected": "notes" in rt.source_mgr.sources,
                 "path": str(config.vault_path) if config.vault_path else None,
