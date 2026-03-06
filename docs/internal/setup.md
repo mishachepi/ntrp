@@ -131,7 +131,9 @@ TELEGRAM_BOT_TOKEN=your-bot-token
 
 When creating a scheduled task with notifications, select Telegram as the channel and provide your user ID.
 
-## Exa.ai Web Search
+## Web Search
+
+Web search is available out of the box via DuckDuckGo (DDGS). For higher-quality results, configure Exa:
 
 - Sign up at [exa.ai](https://exa.ai)
 - Get your API key from the dashboard
@@ -140,6 +142,8 @@ When creating a scheduled task with notifications, select Telegram as the channe
 ```
 EXA_API_KEY=your-key
 ```
+
+Control the provider with `WEB_SEARCH` (`auto` | `exa` | `ddgs` | `none`). Default `auto` prefers Exa when `EXA_API_KEY` is set, otherwise falls back to DDGS.
 
 ## Obsidian
 
