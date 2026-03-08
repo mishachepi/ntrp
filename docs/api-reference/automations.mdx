@@ -6,7 +6,7 @@ description: "Create and manage scheduled automations."
 ## Create automation
 
 ```bash
-curl -X POST http://localhost:8000/automations \
+curl -X POST http://localhost:6877/automations \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -44,21 +44,21 @@ curl -X POST http://localhost:8000/automations \
 ## List automations
 
 ```bash
-curl http://localhost:8000/automations \
+curl http://localhost:6877/automations \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ## Get automation
 
 ```bash
-curl http://localhost:8000/automations/1 \
+curl http://localhost:6877/automations/1 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ## Update automation
 
 ```bash
-curl -X PATCH http://localhost:8000/automations/1 \
+curl -X PATCH http://localhost:6877/automations/1 \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"description": "New task description"}'
@@ -67,7 +67,7 @@ curl -X PATCH http://localhost:8000/automations/1 \
 ## Toggle enable/disable
 
 ```bash
-curl -X POST http://localhost:8000/automations/1/toggle \
+curl -X POST http://localhost:6877/automations/1/toggle \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -76,20 +76,20 @@ curl -X POST http://localhost:8000/automations/1/toggle \
 Allow the automation to modify data (memory, notes, emails):
 
 ```bash
-curl -X POST http://localhost:8000/automations/1/writable \
+curl -X POST http://localhost:6877/automations/1/writable \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ## Run immediately
 
 ```bash
-curl -X POST http://localhost:8000/automations/1/run \
+curl -X POST http://localhost:6877/automations/1/run \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ## Delete automation
 
 ```bash
-curl -X DELETE http://localhost:8000/automations/1 \
+curl -X DELETE http://localhost:6877/automations/1 \
   -H "Authorization: Bearer $API_KEY"
 ```

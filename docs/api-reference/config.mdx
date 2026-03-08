@@ -6,7 +6,7 @@ description: "Server configuration and model management."
 ## Get config
 
 ```bash
-curl http://localhost:8000/config \
+curl http://localhost:6877/config \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -30,7 +30,7 @@ curl http://localhost:8000/config \
 ## Update config
 
 ```bash
-curl -X PATCH http://localhost:8000/config \
+curl -X PATCH http://localhost:6877/config \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"chat_model": "gpt-5.2"}'
@@ -41,14 +41,14 @@ curl -X PATCH http://localhost:8000/config \
 ### Chat/explore/memory models
 
 ```bash
-curl http://localhost:8000/models \
+curl http://localhost:6877/models \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ### Embedding models
 
 ```bash
-curl http://localhost:8000/models/embedding \
+curl http://localhost:6877/models/embedding \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -57,7 +57,7 @@ curl http://localhost:8000/models/embedding \
 Changing the embedding model triggers a full re-index of memory:
 
 ```bash
-curl -X POST http://localhost:8000/config/embedding \
+curl -X POST http://localhost:6877/config/embedding \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"embedding_model": "text-embedding-3-large"}'
@@ -70,14 +70,14 @@ System directives customize the agent's behavior.
 ### Get directives
 
 ```bash
-curl http://localhost:8000/directives \
+curl http://localhost:6877/directives \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ### Update directives
 
 ```bash
-curl -X PUT http://localhost:8000/directives \
+curl -X PUT http://localhost:6877/directives \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"directives": "Always respond in Spanish. Be concise."}'

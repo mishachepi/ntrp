@@ -6,7 +6,7 @@ description: "HTTP API for building on top of ntrp."
 ## Base URL
 
 ```
-http://localhost:8000
+http://localhost:6877
 ```
 
 Configure with `NTRP_HOST` and `NTRP_PORT`.
@@ -16,7 +16,7 @@ Configure with `NTRP_HOST` and `NTRP_PORT`.
 All endpoints except `/health` require a Bearer token:
 
 ```bash
-curl http://localhost:8000/session \
+curl http://localhost:6877/session \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -24,13 +24,13 @@ See [Authentication](/api-reference/authentication) for details.
 
 ## Response format
 
-All endpoints return JSON. Streaming endpoints (`/chat`) use Server-Sent Events (SSE).
+All endpoints return JSON. The event stream (`GET /chat/events/{session_id}`) uses Server-Sent Events (SSE).
 
 ## Endpoints
 
 | Group | Endpoints | Description |
 |-------|-----------|-------------|
-| [Chat](/api-reference/chat) | `POST /chat`, `POST /cancel` | Agent conversation with streaming |
+| [Chat](/api-reference/chat) | `GET /chat/events`, `POST /chat/message`, `POST /cancel` | Persistent SSE stream + fire-and-forget messaging |
 | [Sessions](/api-reference/sessions) | `/session*`, `/sessions*` | Session management |
 | [Memory](/api-reference/memory) | `/facts*`, `/observations*`, `/dreams*` | Memory CRUD |
 | [Automations](/api-reference/automations) | `/automations*` | Scheduled tasks |
@@ -40,13 +40,13 @@ All endpoints return JSON. Streaming endpoints (`/chat`) use Server-Sent Events 
 ## Health check
 
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:6877/health
 ```
 
 ```json
 {
   "status": "ok",
-  "version": "0.3.1"
+  "version": "0.12.1"
 }
 ```
 
@@ -55,7 +55,7 @@ Pass a Bearer token to also verify authentication:
 ```json
 {
   "status": "ok",
-  "version": "0.3.1",
+  "version": "0.12.1",
   "auth": true
 }
 ```

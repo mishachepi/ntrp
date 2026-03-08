@@ -28,7 +28,7 @@ Skills are discovered from three locations (in order):
 Install a skill from GitHub:
 
 ```bash
-curl -X POST http://localhost:8000/skills/install \
+curl -X POST http://localhost:6877/skills/install \
   -H "Authorization: Bearer $NTRP_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"source": "owner/repo/path/to/skill"}'

@@ -3,36 +3,52 @@ title: "Chat"
 description: "Send messages and receive streamed agent responses."
 ---
 
+## Connect to event stream
+
+Open a persistent SSE connection to receive all events for a session.
+
+```bash
+curl -N http://localhost:6877/chat/events/{session_id} \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+Returns a `text/event-stream` response. See [Streaming](/api-reference/streaming) for event types. The connection stays open with keepalive pings every 5 seconds.
+
 ## Send message
+
+Fire-and-forget message send. If an agent is already running, the message is queued for safe injection at the next turn boundary.
 
 <ParamField body="message" type="string" required>
   The user message to send.
 </ParamField>
 
-<ParamField query="session_id" type="string">
-  Target session. Uses current session if omitted.
+<ParamField body="session_id" type="string" required>
+  Target session ID.
 </ParamField>
 
-<ParamField query="skip_approvals" type="boolean" default="false">
+<ParamField body="skip_approvals" type="boolean" default="false">
   Auto-approve all tool calls.
 </ParamField>
 
 ```bash
-curl -X POST http://localhost:8000/chat \
+curl -X POST http://localhost:6877/chat/message \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"message": "What meetings do I have today?"}' \
-  --no-buffer
+  -d '{"message": "What meetings do I have today?", "session_id": "abc-123"}'
 ```
 
-Returns an SSE stream. See [Streaming](/api-reference/streaming) for event types.
+```json
+{"run_id": "run_abc", "session_id": "abc-123"}
+```
+
+The agent response arrives on the SSE event stream.
 
 ## Submit tool result
 
 Approve or reject a pending tool call.
 
 ```bash
-curl -X POST http://localhost:8000/tool-result \
+curl -X POST http://localhost:6877/tools/result \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -48,7 +64,7 @@ curl -X POST http://localhost:8000/tool-result \
 Cancel a running agent loop.
 
 ```bash
-curl -X POST http://localhost:8000/cancel \
+curl -X POST http://localhost:6877/cancel \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -57,7 +73,7 @@ curl -X POST http://localhost:8000/cancel \
 Get current token usage for the session.
 
 ```bash
-curl http://localhost:8000/context \
+curl http://localhost:6877/context \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -75,6 +91,6 @@ curl http://localhost:8000/context \
 Compress conversation history to free token space.
 
 ```bash
-curl -X POST http://localhost:8000/compact \
+curl -X POST http://localhost:6877/compact \
   -H "Authorization: Bearer $API_KEY"
 ```

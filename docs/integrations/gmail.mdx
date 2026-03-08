@@ -51,13 +51,13 @@ Start the server and the TUI. On first use of any email tool, ntrp will open a b
 Add additional Gmail accounts via the API:
 
 ```bash
-curl -X POST http://localhost:8000/gmail/add \
+curl -X POST http://localhost:6877/gmail/add \
   -H "Authorization: Bearer $NTRP_API_KEY"
 ```
 
 List connected accounts:
 
 ```bash
-curl http://localhost:8000/gmail/accounts \
+curl http://localhost:6877/gmail/accounts \
   -H "Authorization: Bearer $NTRP_API_KEY"
 ```

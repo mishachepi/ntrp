@@ -5,7 +5,9 @@ description: "Server-Sent Events for real-time agent execution."
 
 ## Overview
 
-The `POST /chat` endpoint returns a Server-Sent Events (SSE) stream. Each event has a `type` field indicating what happened.
+ntrp uses a persistent SSE connection per session. Connect to `GET /chat/events/{session_id}` to receive all events (agent responses, tool calls, background task results). Messages are sent via `POST /chat/message` as fire-and-forget — the response arrives on the SSE stream.
+
+Each event has a `type` field indicating what happened.
 
 ## Event types
 
@@ -67,7 +69,7 @@ Tool requires user approval before executing.
 }
 ```
 
-Respond with `POST /tool-result` to approve or reject.
+Respond with `POST /tools/result` to approve or reject.
 
 ### `session_info`
 
@@ -119,10 +121,10 @@ When `approval_needed` is received:
 
 1. Display the tool call to the user
 2. Collect their decision (approve/reject)
-3. Submit via `POST /tool-result`:
+3. Submit via `POST /tools/result`:
 
 ```bash
-curl -X POST http://localhost:8000/tool-result \
+curl -X POST http://localhost:6877/tools/result \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

@@ -8,14 +8,14 @@ description: "CRUD operations for facts, observations, and dreams."
 ### List facts
 
 ```bash
-curl "http://localhost:8000/facts?limit=20&offset=0" \
+curl "http://localhost:6877/facts?limit=20&offset=0" \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ### Get fact
 
 ```bash
-curl http://localhost:8000/facts/42 \
+curl http://localhost:6877/facts/42 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -24,7 +24,7 @@ Returns the fact with its entities and linked facts.
 ### Update fact
 
 ```bash
-curl -X PATCH http://localhost:8000/facts/42 \
+curl -X PATCH http://localhost:6877/facts/42 \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"text": "Updated fact text"}'
@@ -33,7 +33,7 @@ curl -X PATCH http://localhost:8000/facts/42 \
 ### Delete fact
 
 ```bash
-curl -X DELETE http://localhost:8000/facts/42 \
+curl -X DELETE http://localhost:6877/facts/42 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -42,14 +42,14 @@ curl -X DELETE http://localhost:8000/facts/42 \
 ### List observations
 
 ```bash
-curl http://localhost:8000/observations \
+curl http://localhost:6877/observations \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ### Get observation
 
 ```bash
-curl http://localhost:8000/observations/7 \
+curl http://localhost:6877/observations/7 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -58,7 +58,7 @@ Returns the observation with its supporting facts.
 ### Update observation
 
 ```bash
-curl -X PATCH http://localhost:8000/observations/7 \
+curl -X PATCH http://localhost:6877/observations/7 \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"summary": "Updated observation"}'
@@ -67,7 +67,7 @@ curl -X PATCH http://localhost:8000/observations/7 \
 ### Delete observation
 
 ```bash
-curl -X DELETE http://localhost:8000/observations/7 \
+curl -X DELETE http://localhost:6877/observations/7 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -76,28 +76,28 @@ curl -X DELETE http://localhost:8000/observations/7 \
 ### List dreams
 
 ```bash
-curl http://localhost:8000/dreams \
+curl http://localhost:6877/dreams \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ### Get dream
 
 ```bash
-curl http://localhost:8000/dreams/3 \
+curl http://localhost:6877/dreams/3 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ### Delete dream
 
 ```bash
-curl -X DELETE http://localhost:8000/dreams/3 \
+curl -X DELETE http://localhost:6877/dreams/3 \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 ## Stats
 
 ```bash
-curl http://localhost:8000/stats \
+curl http://localhost:6877/stats \
   -H "Authorization: Bearer $API_KEY"
 ```
 
@@ -114,13 +114,13 @@ curl http://localhost:8000/stats \
 Delete all memory data:
 
 ```bash
-curl -X POST http://localhost:8000/memory/clear \
+curl -X POST http://localhost:6877/memory/clear \
   -H "Authorization: Bearer $API_KEY"
 ```
 
 Clear only observations (keep facts):
 
 ```bash
-curl -X POST http://localhost:8000/memory/observations/clear \
+curl -X POST http://localhost:6877/memory/observations/clear \
   -H "Authorization: Bearer $API_KEY"
 ```

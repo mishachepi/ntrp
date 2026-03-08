@@ -20,7 +20,7 @@ Set at least one provider API key. ntrp auto-selects models based on what's avai
 |---------|-----------|-------------|----------------|
 | `ANTHROPIC_API_KEY` | claude-sonnet-4-6 | claude-sonnet-4-6 | — |
 | `OPENAI_API_KEY` | gpt-5.2 | gpt-5.2 | text-embedding-3-small |
-| `GEMINI_API_KEY` | gemini-3-pro-preview | gemini-3-flash-preview | gemini-embedding-001 |
+| `GEMINI_API_KEY` | gemini-3.1-pro-preview | gemini-3-flash-preview | gemini-embedding-001 |
 
 ### Claude OAuth (Pro/Max)
 
@@ -50,6 +50,8 @@ export NTRP_EMBEDDING_MODEL=text-embedding-3-small
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NTRP_MEMORY` | `true` | Enable persistent memory |
+| `NTRP_DREAMS` | `false` | Enable cross-domain dream generation |
+| `NTRP_CONSOLIDATION_INTERVAL` | `30` | Minutes between consolidation runs |
 | `NTRP_GMAIL` | `false` | Enable Gmail integration |
 | `NTRP_GMAIL_DAYS` | `30` | Days of email history to index |
 | `NTRP_CALENDAR` | `false` | Enable Google Calendar |

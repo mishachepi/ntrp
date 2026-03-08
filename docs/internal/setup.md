@@ -174,6 +174,7 @@ Controls when and how conversation context is compressed to stay within model li
 | Max messages | `max_messages` | `120` | 20–500 |
 | Keep ratio | `compression_keep_ratio` | `0.2` | 0.1–0.8 (fraction of recent messages kept) |
 | Summary tokens | `summary_max_tokens` | `1500` | 500–4000 |
+| Consolidation interval | `consolidation_interval` | `30` | Minutes between memory consolidation runs |
 
 Compaction triggers when either the message count exceeds `max_messages` or actual input tokens exceed `compression_threshold` × model context limit. The most recent `compression_keep_ratio` fraction of messages is preserved, and older messages are replaced with an LLM-generated summary capped at `summary_max_tokens`.
 
