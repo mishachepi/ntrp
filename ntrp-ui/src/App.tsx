@@ -113,6 +113,7 @@ function AppContent({
     sendMessage,
     handleApproval,
     cancel,
+    background,
     revert,
     setStatus,
     switchToSession,
@@ -270,6 +271,17 @@ function AppContent({
     });
   }, [sessionId, sidebarData.sessions, switchSession, switchToSession, clearQueue]);
 
+  const handleSessionClick = useCallback((targetId: string) => {
+    if (targetId === sessionId) return;
+    clearQueue();
+    switchToSession(targetId);
+    switchSession(targetId).then((result) => {
+      if (result) {
+        switchToSession(targetId, convertHistoryToMessages(result.history));
+      }
+    });
+  }, [sessionId, switchSession, switchToSession, clearQueue]);
+
   const tabPendingRef = useRef(false);
   const tabTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -292,6 +304,11 @@ function AppContent({
       }
       if (key.name === "escape" && isStreaming && !dialog.isOpen) {
         cancel();
+        return;
+      }
+      if (key.ctrl && key.name === "o" && isStreaming && !dialog.isOpen) {
+        background();
+        return;
       }
       if (key.shift && key.name === "tab" && !showSettings && viewMode === "chat" && !dialog.isOpen && !pendingApproval) {
         cycleSession();
@@ -312,7 +329,7 @@ function AppContent({
         return;
       }
     },
-    [renderer, isStreaming, pendingApproval, cancel, showSettings, viewMode, dialog.isOpen, toggleSkipApprovals, toggleSettings, cycleSession, startNewSession]
+    [renderer, isStreaming, pendingApproval, cancel, background, showSettings, viewMode, dialog.isOpen, toggleSkipApprovals, toggleSettings, cycleSession, startNewSession]
   );
 
   useKeypress(handleGlobalKeypress, { isActive: true });
@@ -342,6 +359,7 @@ function AppContent({
             currentSessionName={sessionName}
             sessionStates={sessionStates}
             sections={settings.sidebar}
+            onSessionClick={handleSessionClick}
           />
           <box width={1} height={contentHeight} flexShrink={0} flexDirection="column">
             {Array.from({ length: contentHeight }).map((_, i) => (
