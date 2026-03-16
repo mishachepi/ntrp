@@ -10,7 +10,9 @@ def parse_args(raw: str | dict) -> dict:
         return {}
 
 
-def blocks_to_text(content: str | list) -> str:
+def blocks_to_text(content: str | list | None) -> str:
+    if content is None:
+        return ""
     if isinstance(content, str):
         return content
     parts = []

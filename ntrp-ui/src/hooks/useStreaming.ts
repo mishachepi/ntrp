@@ -3,7 +3,7 @@ import { useStore } from "zustand";
 import type { Message, ServerEvent, Config, PendingApproval, TokenUsage } from "../types.js";
 import { ZERO_USAGE } from "../types.js";
 import type { ToolChainItem } from "../components/toolchain/types.js";
-import { connectEvents, sendChatMessage, submitToolResult, cancelRun, backgroundRun, revertSession } from "../api/client.js";
+import { connectEvents, sendChatMessage, submitToolResult, cancelRun, backgroundRun, revertSession, type ImageBlock } from "../api/client.js";
 import {
   MAX_TOOL_DESCRIPTION_CHARS,
   Status,
@@ -314,15 +314,17 @@ export function useStreaming({
     });
   }, [store, mutateSession]);
 
-  const sendMessage = useCallback(async (message: string) => {
+  const sendMessage = useCallback(async (message: string, images?: ImageBlock[]) => {
     const id = store.getState().viewedId;
     if (!id) return;
 
+    const imageCount = images?.length || 0;
+
     const s = getSession(id);
     if (s.isStreaming) {
-      mutateSession(id, (s) => addMessageToSession(s, { role: "user", content: message }));
+      mutateSession(id, (s) => addMessageToSession(s, { role: "user", content: message, imageCount, images }));
       try {
-        await sendChatMessage(message, id, configRef.current, skipApprovalsRef.current);
+        await sendChatMessage(message, id, configRef.current, skipApprovalsRef.current, images);
       } catch (error) {
         mutateSession(id, (s) => addMessageToSession(s, { role: "error", content: `Inject failed: ${error}` }));
       }
@@ -330,7 +332,7 @@ export function useStreaming({
     }
 
     mutateSession(id, (s) => {
-      addMessageToSession(s, { role: "user", content: message });
+      addMessageToSession(s, { role: "user", content: message, imageCount, images });
       s.isStreaming = true;
       s.pendingText = "";
       s.status = Status.THINKING;
@@ -341,7 +343,7 @@ export function useStreaming({
     });
 
     try {
-      const res = await sendChatMessage(message, id, configRef.current, skipApprovalsRef.current);
+      const res = await sendChatMessage(message, id, configRef.current, skipApprovalsRef.current, images);
       mutateSession(id, (s) => { s.runId = res.run_id; });
     } catch (error) {
       mutateSession(id, (s) => {
