@@ -22,10 +22,13 @@ function AutomationRow({ automation, width }: { automation: Automation; width: n
 }
 
 export function AutomationsSection({ automations, width }: { automations: Automation[]; width: number }) {
+  const userAutomations = automations.filter(a => !a.builtin);
+  if (userAutomations.length === 0) return null;
+
   return (
     <box flexDirection="column">
       <SectionHeader label="NEXT UP" />
-      {automations.map(s => (
+      {userAutomations.map(s => (
         <AutomationRow key={s.task_id} automation={s} width={width} />
       ))}
     </box>
